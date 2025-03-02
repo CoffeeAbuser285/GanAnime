@@ -53,7 +53,7 @@ class Gui(QWidget, GuiHelper):
     # File Location for Training Data
     def FindTrainingDataFolder(self):
         # File selection
-        self.fileBrowser1.clicked.connect(lambda: self.OpenFileDialog(self.trainingDataFolder))
+        self.fileBrowser1.clicked.connect(lambda: self.OpenFileDialog(self.trainingDataFolder, True))
         self.trainingDataFolder = QLineEdit(self)
         
         # Adding Widgets
@@ -64,7 +64,7 @@ class Gui(QWidget, GuiHelper):
     # File Location for Test Data
     def FindTestDataFolder(self):
         # File selection
-        self.fileBrowser2.clicked.connect(lambda: self.OpenFileDialog(self.testDataFolder))
+        self.fileBrowser2.clicked.connect(lambda: self.OpenFileDialog(self.testDataFolder, True))
         self.testDataFolder = QLineEdit(self)
         
         # Adding Widgets
@@ -92,7 +92,7 @@ class Gui(QWidget, GuiHelper):
         self.runButton.clicked.connect(self.RunProgram)
         
         # Setting and adding button
-        self.layout.addWidget(self.runButton,10,1)
+        self.layout.addWidget(self.runButton, 10, 1)
         
     # Maps exit button to Gui
     def ExitButton(self):
@@ -121,9 +121,15 @@ class Gui(QWidget, GuiHelper):
     
     # Run Program
     def RunProgram(self):
+        print(self.testDataFolder.text())
+        if not self.CheckIfReady():
+            return
+        
         self.DisableButtons()
         
         # Starting Progress Bar Thread
-        self.StartThread(self.ProgressBar)
+        self.StartThread(self.ProgressBar, self.EnableButtons)
+        
+        
     
         
