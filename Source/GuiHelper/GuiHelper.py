@@ -29,9 +29,9 @@ IMAGE_EXTENSIONS = {".png", ".jpg"}
 class GuiHelper():
     def __init__(self):
         # Initializing Variables
-        self.trainingDataFolder = ''
-        self.testDataFolder = ''
-        self.resultDataFolder = ''
+        self.trainingDataFolder = None
+        self.testDataFolder = None
+        self.resultDataFolder = None
         
         # Initializing Buttons
         self.pbar = QProgressBar(self)

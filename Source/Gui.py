@@ -55,6 +55,7 @@ class Gui(QWidget, GuiHelper):
         # File selection
         self.fileBrowser1.clicked.connect(lambda: self.OpenFileDialog(self.trainingDataFolder, True))
         self.trainingDataFolder = QLineEdit(self)
+        self.trainingDataFolder.setText('Images/TrainingImages')
         
         # Adding Widgets
         self.layout.addWidget(QLabel('Training Data Folder:'), 1, 0)
@@ -66,6 +67,7 @@ class Gui(QWidget, GuiHelper):
         # File selection
         self.fileBrowser2.clicked.connect(lambda: self.OpenFileDialog(self.testDataFolder, True))
         self.testDataFolder = QLineEdit(self)
+        self.testDataFolder.setText('Images/TestImages')
         
         # Adding Widgets
         self.layout.addWidget(QLabel('Test Data Folder:'), 3, 0)
@@ -77,6 +79,7 @@ class Gui(QWidget, GuiHelper):
         # File selection
         self.fileBrowser3.clicked.connect(lambda: self.OpenFileDialog(self.resultDataFolder))
         self.resultDataFolder = QLineEdit(self)
+        self.resultDataFolder.setText('Images/ResultImages')
         
         # Adding Widgets
         self.layout.addWidget(QLabel('Result Data Folder:'), 5, 0)
@@ -121,7 +124,6 @@ class Gui(QWidget, GuiHelper):
     
     # Run Program
     def RunProgram(self):
-        print(self.testDataFolder.text())
         if not self.CheckIfReady():
             return
         
