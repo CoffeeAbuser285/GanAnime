@@ -11,10 +11,8 @@ class ThreadingHelper(QThread):
         self.func = func
         self.args = args
         self.kwargs = kwargs
-        print("init")
     
     def run(self):
         # Calling function
-        print("Helper")
         self.func(*self.args, **self.kwargs)
         self.finished.emit()  # Emitting signal when function is done
