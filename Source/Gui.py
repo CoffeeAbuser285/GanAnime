@@ -2,82 +2,62 @@ from .NeuralNetwork import Gan
 from .GuiHelper import GuiHelper
 from .DataImporter import DataLoad
 
+import os
 import sys
+from pathlib import Path
 from PyQt6.QtWidgets import (
     QApplication,
     QWidget,
     QLineEdit,
     QPushButton,
-    QVBoxLayout
+    QVBoxLayout,
+    QFileDialog,
+    QListWidget,
+    QGridLayout,
+    QLabel,
+    QProgressBar,
+    QMessageBox
 )
 
 app = QApplication(sys.argv)
 
-class Gui(QWidget):
+class Gui(QWidget, GuiHelper):
     def __init__(self, *args, **kwargs): 
-        super().__init__(*args, **kwargs)
+        QWidget.__init__(self, *args, **kwargs)
         
+        # Initializing Variables
+        self.trainingDataFolder = ''
+        self.testDataFolder = ''
+        self.resultDataFolder = ''
+        self.pbar = QProgressBar(self)
+        
+        # Creating Window
         self.setWindowTitle("Image Generator")
         self.setGeometry(100, 100, 320, 210)
+        self.layout = QGridLayout()
         
-        self.layout = QVBoxLayout()
+        # Mapping Files
+        self.FindTrainingDataFolder()
+        self.FindTestDataFolder()
+        self.FindResultDataFolder()
+        
+        # Progress Bar
+        self.AddProgressBar()
         
         # Mapping Buttons
-        self.TrainingDataLine()
-        self.TestDataLine()
         self.RunButton()
         self.ExitButton()
         
+        # Setting layout
+        self.setLayout(self.layout)
+        
+        # Displaying Gui
         self.show()
         sys.exit(app.exec())
-        
-        Gan()
-        print("Looking good")
     
+    # Gui State Machine
     def GuiStateMachine(self):
         pass
     
-    def TrainingDataLine(self):
-        self.imageBox1 = QLineEdit(
-            self,
-            placeholderText='Enter File Location of Training Data',
-            clearButtonEnabled=True
-        )
-        
-        # settting and adding button
-        self.layout.addWidget(self.imageBox1)
-        self.setLayout(self.layout)
-        
-    def TestDataLine(self):
-        self.imageBox2 = QLineEdit(
-            self,
-            placeholderText='Enter File Location of Test Data',
-            clearButtonEnabled=True
-        )
-        
-        # settting and adding button
-        self.layout.addWidget(self.imageBox2)
-        self.setLayout(self.layout)
-    
-    # Maps run button to Gui
-    def RunButton(self):
-        # Mapping button to RunProgram() function
-        button = QPushButton('Run')
-        button.clicked.connect(GuiHelper.RunProgram)
-        
-        # setting and adding button
-        self.setLayout(self.layout)
-        self.layout.addWidget(button)
-        
-    # Maps exit button to Gui
-    def ExitButton(self):
-        # Mapping button to ExitProgram() function
-        button = QPushButton('Exit')
-        button.setGeometry(200, 150, 100, 40) 
-        button.clicked.connect(GuiHelper.ExitProgram)
-        
-        # setting and adding button
-        self.setLayout(self.layout)
-        self.layout.addWidget(button)
         
         
