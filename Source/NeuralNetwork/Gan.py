@@ -60,12 +60,17 @@ class Gan():
                         (x,y) = (x.to(self.device), y.to(self.device))
                 
                         outputs = self.cnn(x)
-                        #prediction.extend(outputs.argmax(1).cpu().numpy())
                         
                         correctCount += sum(outputs.argmax(1) == y)
                         
                 print('Test Accuracy: ', round(float(100*correctCount)/len(test_data), 2), '%')
                 testAccuracy.append(float(100*correctCount)/len(test_data))
+                
+    def TrainGenerativeNn(self):
+        pass
+    
+    def TrainGraderNn(self):
+        pass
 
 
 
