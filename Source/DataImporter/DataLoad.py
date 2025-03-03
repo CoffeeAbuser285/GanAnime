@@ -39,7 +39,7 @@ class DataLoad(ImageDataset):
                 imageFiles.remove(file)
   
         dataSet = ImageDataset(imageFiles)
-        dataLoader = DataLoader(dataSet, batch_size=2, shuffle=True)
+        dataLoader = DataLoader(dataSet, batch_size=1, shuffle=True)
             
         return dataSet, dataLoader
         

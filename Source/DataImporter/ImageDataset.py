@@ -16,8 +16,10 @@ class ImageDataset(Dataset):
         image = cv2.imread(self.imagePaths[idx])
         imageRgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         resizedImage = self.resizeImage(imageRgb)
-        imageTensor = torch.from_numpy(resizedImage).permute(2, 0, 1)
-        return imageTensor
+        float32Image = torch.tensor(resizedImage, dtype=torch.float32)
+        imageTensor = float32Image.permute(2, 0, 1) / 255.0 # Normalize
+        #finalTensor = imageTensor.unsqueeze(0)
+        return imageTensor # [1, 3, 256, 256]
     
     def resizeImage(self, image):
         image = cv2.resize(image, (self.TARGET_WIDTH, self.TARGET_HEIGHT))
