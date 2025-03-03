@@ -32,9 +32,9 @@ class Gui(QWidget, GuiHelper, DataLoad, Gan):
         self.layout = QGridLayout()
         
         # Mapping Files
-        self.FindTrainingDataFolder()
-        self.FindTestDataFolder()
-        self.FindResultDataFolder()
+        self.FindtrainingImageFolder()
+        self.FindtestImageFolder()
+        self.FindresultImageFolder()
         
         # Progress Bar
         self.AddProgressBar()
@@ -51,39 +51,39 @@ class Gui(QWidget, GuiHelper, DataLoad, Gan):
         sys.exit(app.exec())
     
     # File Location for Training Data
-    def FindTrainingDataFolder(self):
+    def FindtrainingImageFolder(self):
         # File selection
-        self.fileBrowser1.clicked.connect(lambda: self.OpenFileDialog(self.trainingDataFolder, True))
-        self.trainingDataFolder = QLineEdit(self)
-        self.trainingDataFolder.setText('Images/TrainingImages')
+        self.fileBrowser1.clicked.connect(lambda: self.OpenFileDialog(self.trainingImageFolder, True))
+        self.trainingImageFolder = QLineEdit(self)
+        self.trainingImageFolder.setText('Images/TrainingImages')
         
         # Adding Widgets
         self.layout.addWidget(QLabel('Training Data Folder:'), 1, 0)
-        self.layout.addWidget(self.trainingDataFolder, 1, 1)
+        self.layout.addWidget(self.trainingImageFolder, 1, 1)
         self.layout.addWidget(self.fileBrowser1, 1, 2)
         
     # File Location for Test Data
-    def FindTestDataFolder(self):
+    def FindtestImageFolder(self):
         # File selection
-        self.fileBrowser2.clicked.connect(lambda: self.OpenFileDialog(self.testDataFolder, True))
-        self.testDataFolder = QLineEdit(self)
-        self.testDataFolder.setText('Images/TestImages')
+        self.fileBrowser2.clicked.connect(lambda: self.OpenFileDialog(self.testImageFolder, True))
+        self.testImageFolder = QLineEdit(self)
+        self.testImageFolder.setText('Images/TestImages')
         
         # Adding Widgets
         self.layout.addWidget(QLabel('Test Data Folder:'), 3, 0)
-        self.layout.addWidget(self.testDataFolder, 3, 1)
+        self.layout.addWidget(self.testImageFolder, 3, 1)
         self.layout.addWidget(self.fileBrowser2, 3, 2)
         
     # File Location to Save Resulting Data    
-    def FindResultDataFolder(self):
+    def FindresultImageFolder(self):
         # File selection
-        self.fileBrowser3.clicked.connect(lambda: self.OpenFileDialog(self.resultDataFolder))
-        self.resultDataFolder = QLineEdit(self)
-        self.resultDataFolder.setText('Images/ResultImages')
+        self.fileBrowser3.clicked.connect(lambda: self.OpenFileDialog(self.resultImageFolder))
+        self.resultImageFolder = QLineEdit(self)
+        self.resultImageFolder.setText('Images/ResultImages')
         
         # Adding Widgets
         self.layout.addWidget(QLabel('Result Data Folder:'), 5, 0)
-        self.layout.addWidget(self.resultDataFolder, 5, 1)
+        self.layout.addWidget(self.resultImageFolder, 5, 1)
         self.layout.addWidget(self.fileBrowser3, 5, 2)
     
     def AddProgressBar(self):
@@ -126,7 +126,7 @@ class Gui(QWidget, GuiHelper, DataLoad, Gan):
                 
     # Loading Data
     def LoadData(self):
-        pass
+        self.DataPrep(self.trainingImageFolder.text(), self.testImageFolder.text())
     
     # Run Program
     def RunProgram(self):
@@ -139,6 +139,7 @@ class Gui(QWidget, GuiHelper, DataLoad, Gan):
         self.StartThread(self.ProgressBar, self.EnableButtons)
         
         # Load all the data for the ML model
+        self.LoadData()
         # Update Progress Bar
         
         # Run Neural Network

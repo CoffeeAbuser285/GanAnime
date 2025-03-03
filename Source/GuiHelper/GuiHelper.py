@@ -29,9 +29,9 @@ IMAGE_EXTENSIONS = {".png", ".jpg"}
 class GuiHelper():
     def __init__(self):
         # Initializing Variables
-        self.trainingDataFolder = None
-        self.testDataFolder = None
-        self.resultDataFolder = None
+        self.trainingImageFolder = None
+        self.testImageFolder = None
+        self.resultImageFolder = None
         
         # Initializing Buttons
         self.pbar = QProgressBar(self)
@@ -56,18 +56,18 @@ class GuiHelper():
         self.fileBrowser1.setDisabled(True)
         self.fileBrowser2.setDisabled(True)
         self.fileBrowser3.setDisabled(True)
-        self.trainingDataFolder.setDisabled(True)
-        self.testDataFolder.setDisabled(True)
-        self.resultDataFolder.setDisabled(True)
+        self.trainingImageFolder.setDisabled(True)
+        self.testImageFolder.setDisabled(True)
+        self.resultImageFolder.setDisabled(True)
         
     def EnableButtons(self):
         self.runButton.setDisabled(False)
         self.fileBrowser1.setDisabled(False)
         self.fileBrowser2.setDisabled(False)
         self.fileBrowser3.setDisabled(False)
-        self.trainingDataFolder.setDisabled(False)
-        self.testDataFolder.setDisabled(False)
-        self.resultDataFolder.setDisabled(False)
+        self.trainingImageFolder.setDisabled(False)
+        self.testImageFolder.setDisabled(False)
+        self.resultImageFolder.setDisabled(False)
         
     # Open File Dialog
     def OpenFileDialog(self, filePath, checkIfImage = False):
@@ -87,11 +87,11 @@ class GuiHelper():
             filePath.setText(str(path))
             
     def CheckIfReady(self):
-        if not os.path.isdir(self.resultDataFolder.text()):
+        if not os.path.isdir(self.resultImageFolder.text()):
             QMessageBox.warning(None, "Invalid Folder", "Data Path does not exist.")
             return False
         
-        for folderName in [self.trainingDataFolder.text(), self.testDataFolder.text()]: 
+        for folderName in [self.trainingImageFolder.text(), self.testImageFolder.text()]: 
             if not os.path.isdir(folderName):
                 QMessageBox.warning(None, "Invalid Folder", "Data Path does not exist.")
                 return False
