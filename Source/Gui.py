@@ -22,7 +22,7 @@ from PyQt6.QtWidgets import (
 
 app = QApplication(sys.argv)
 
-class Gui(QWidget, GuiHelper):
+class Gui(QWidget, GuiHelper, DataLoad, Gan):
     def __init__(self, *args, **kwargs): 
         QWidget.__init__(self, *args, **kwargs)
         
@@ -118,8 +118,14 @@ class Gui(QWidget, GuiHelper):
   
             # setting value to progress bar 
             self.pbar.setValue(i) 
+            
+            '''
+        while(1):
+        # break when finished
+            '''
                 
-    def LoadData():
+    # Loading Data
+    def LoadData(self):
         pass
     
     # Run Program
@@ -131,6 +137,17 @@ class Gui(QWidget, GuiHelper):
         
         # Starting Progress Bar Thread
         self.StartThread(self.ProgressBar, self.EnableButtons)
+        
+        # Load all the data for the ML model
+        # Update Progress Bar
+        
+        # Run Neural Network
+        # Update Progress Bar based on progress on NN
+        
+        # Produce Images
+        # Update Progress Bar
+        
+        # Produce Pop up alerting user that the images have been generated
         
         
     
