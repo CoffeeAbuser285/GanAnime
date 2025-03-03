@@ -123,10 +123,6 @@ class Gui(QWidget, GuiHelper, DataLoad, Gan):
         while(1):
         # break when finished
             '''
-                
-    # Loading Data
-    def LoadData(self):
-        self.DataPrep(self.trainingImageFolder.text(), self.testImageFolder.text())
     
     # Run Program
     def RunProgram(self):
@@ -139,10 +135,14 @@ class Gui(QWidget, GuiHelper, DataLoad, Gan):
         self.StartThread(self.ProgressBar, self.EnableButtons)
         
         # Load all the data for the ML model
-        self.LoadData()
+        self.DataPrep(self.trainingImageFolder.text(), self.testImageFolder.text())
+        
         # Update Progress Bar
         
         # Run Neural Network
+        self.InitializeParameters(self.trainDataLoader, self.testDataLoader)
+        self.TrainNn()
+        
         # Update Progress Bar based on progress on NN
         
         # Produce Images

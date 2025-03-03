@@ -8,13 +8,12 @@ from torch.utils.data import Dataset, DataLoader
 
 class DataLoad(ImageDataset):
     def __init__(self): 
-        self.trainingDataTorch = []
-        self.testDataTorch = []
         self.trainDataSet = None
         self.trainDataLoader = None
         self.testDataSet = None
         self.testDataLoader = None
-    
+        
+    # Preparing Data
     def DataPrep(self, trainingImageFolder, testImageFolder):
         trainingImageFiles = self.LoadingImages(trainingImageFolder)
         testImageFiles = self.LoadingImages(testImageFolder)
