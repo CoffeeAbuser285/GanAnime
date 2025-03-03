@@ -5,8 +5,9 @@ import time
 import torch
 from torch import nn
 from torch.optim import Adam
+from torch.utils.data import Dataset, DataLoader
 
-class Gan():
+class Gan(GraderCnn, GenCnn):
     def InitializeParameters(self, trainDataLoader, testDataLoader):
         self.INIT_LR = 1e-3
         self.BATCH_SIZE = 1024
