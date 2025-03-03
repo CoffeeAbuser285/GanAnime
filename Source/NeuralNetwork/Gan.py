@@ -3,24 +3,33 @@ from .GraderCnn import GraderCnn
 
 import time
 import torch
-from torch import nn
+import torch.nn as nn
 from torch.optim import Adam
 from torch.utils.data import Dataset, DataLoader
 
-class Gan(GraderCnn, GenCnn):
+class Gan():
     def InitializeParameters(self, trainDataLoader, testDataLoader):
-        self.INIT_LR = 1e-3
-        self.BATCH_SIZE = 1024
+        self.INIT_LR = 2e-4
+        self.BATCH_SIZE = 32
         self.EPOCHS = 200
         self.W_REG = 0.004
+        
+        self.lossD = None
+        self.lossG = None
+        self.randTorch = None
         
         self.trainDataLoader = trainDataLoader
         self.testDataLoader = testDataLoader
         
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.cnn = GenCnn(numChannels = 3, classes = 10).to(self.device)
-        self.opt = Adam(self.cnn.parameters(), lr = self.INIT_LR, weight_decay=self.W_REG)
-        self.lossFn = nn.NLLLoss()
+        
+        
+        self.GenCnn = GenCnn(100, 3).to(self.device)
+        self.GraderCnn = GraderCnn(3).to(self.device)
+        
+        self.lossBce = nn.BCELoss()
+        self.optG = Adam(self.GenCnn.parameters(), lr=self.INIT_LR, betas=(0.5, 0.999))
+        self.optD = Adam(self.GraderCnn.parameters(), lr=self.INIT_LR, betas=(0.5, 0.999))
         
     
     def TrainNn(self):
@@ -34,20 +43,17 @@ class Gan(GraderCnn, GenCnn):
         
         #training neural network
         for i in range(self.EPOCHS):
-            self.cnn.train()
-
-            trainCorrect = 0
-            correctCount = 0
-            
-            for (x,y) in self.trainDataLoader:
-                y = y.type(torch.LongTensor) 
-                (x,y) = (x.to(self.device), y.to(self.device))
-                outputs = self.cnn(x)
-                loss = self.lossFn(outputs, y)
+            for self.realImages, _ in self.trainDataLoader:
+                #y = y.type(torch.LongTensor) 
+                #(x,y) = (x.to(self.device), y.to(self.device))
+                self.realImages = self.realImages.to(self.device)
+                self.batchSize = self.realImages.size(0)
                 
-                self.opt.zero_grad()
-                loss.backward()
-                self.opt.step()
+                self.realLabels = torch.ones(self.batchSize, 1, device=self.device)
+                self.fakeLabels = torch.zeros(self.batchSize, 1, device=self.device)
+                
+                self.TrainGraderNn()
+                self.TrainGeneratorNn()
                 
                 trainCorrect += sum(outputs.argmax(1) == y)
                 
@@ -66,12 +72,32 @@ class Gan(GraderCnn, GenCnn):
                         
                 print('Test Accuracy: ', round(float(100*correctCount)/len(test_data), 2), '%')
                 testAccuracy.append(float(100*correctCount)/len(test_data))
-                
-    def TrainGenerativeNn(self):
-        pass
     
     def TrainGraderNn(self):
-        pass
+        # Train Discriminator
+        self.randTorch = torch.randn(self.batchSize, 100, 1, 1, device=self.device)
+        self.fakeImages = self.GenCnn(self.randTorch)
+        realLoss = self.lossBce(self.GraderCnn(self.realImages), self.realLabels)
+        fakeLoss = self.lossBce(self.GraderCnn(self.fakeImages.detach()), self.fakeLabels)
+        self.lossD = realLoss + fakeLoss
+        
+        self.optG.zero_grad()
+        self.lossG.backward()
+        self.optG.step()
+                
+    def TrainGeneratorNn(self):
+        # Train Generator
+        self.fakeImages = self.GenCnn(self.randTorch)
+        self.lossG = self.lossBce(self.GraderCnn(self.fakeImages), self.realLabels)
+
+        self.optG.zero_grad()
+        self.lossG.backward()
+        self.optG.step()
+        
+        self.optD.zero_grad()
+        self.lossD.backward()
+        self.optD.step()
+
 
 
 
