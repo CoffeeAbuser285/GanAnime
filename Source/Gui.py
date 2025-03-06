@@ -121,6 +121,7 @@ class Gui(QWidget, GuiHelper, DataLoad, Gan):
             
             '''
         while(1):
+        # tie percentage to EPOCHs
         # break when finished
             '''
     
